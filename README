@@ -1,0 +1,74 @@
+Description
+-----------
+
+The colorShow utility functionality depends on the COMMAND (see "usage" section below)
+
+- "show" command. Draws color rectangle on you terminal. The terminal have to support true color.
+Because the full color space has three dimensions (either HSL or RGB) we print only one
+slice of the color space while fixing one axis. For example if you fix "red" channel for
+some value you will see square with different green and blue values and with a specified
+red value.
+
+- "rgb" or "hsl" commands. Print full info about the specified color.
+
+
+Notes
+-----
+- In order to use -g / -G switches or "grabc" command the grabc tool should be installed.
+  Use "apt install grabc" on debian based systems or appropriate dnf/pacman/etc... commands
+  for another systems
+- "grabc" functionality doesn't work on Ubuntu mate / mate-terminal.
+- Inspired by "pastel" tool (https://github.com/sharkdp/pastel.git)
+
+
+Usage
+-----
+        colorShow <COMMAND> <COMMAND_PARAMS> [SWITCHES]
+
+Command are
+
+show    - Draw slice of HSL cylinder or RGB cube, see commands parameters below:
+    h HUE   - Print this hue with different saturation/luminosity, must be between 0 - 360
+    s SAT   - Print this saturation with different hue/luminosity, must be between 0 - 1 or 0% - 100%
+    l LUM   - Print this luminosity with different hue/saturation, must be between 0 - 1 or 0% - 100%
+    r RED   - Print green/blue matrix with specified red level, must be between 0-255 (0x00-0xff)
+    g GREEN - Print red/blue matrix with specified green level, must be between 0-255 (0x00-0xff)
+    b BLUE  - Print red/blue matrix with specified blue level, must be between 0-255 (0x00-0xff)
+
+rgb     - Show info about specified color in RGB format, command params may be one of the following:
+    #XXXXXX - Where X is a hexa character
+    XXXXXX - Where X is a hexa character
+    R G B   - Three values for R, G and B, values must be between 0 - 255
+        May be integer, hexa (with a 0x prefix), float or percentage
+
+hsl     - Show info about specified color in HSL format, command params are:
+    H S L   - Three values for hue, saturation and luminosity
+        Hue value must be between 0 - 360, may be either integer or float
+        saturation and luminosity values may be float (between 0.0 - 1.0)
+        or percentage between 0% and 100%
+
+grabc   - Using external "grabc" command to grab the color and then prints the color info
+
+Switches are:
+    -h       - print this message
+    -q       - Quiet mode, print colors only without additional info.
+    -c COLS  - Amount of columns use for the print, default is 168
+    -r ROWS  - Amount of rows use for the print, default is 41
+    -g       - Grab color and print its info after "show" command. Note that "grabc" external command
+               should be installed, to install it use "apt install grabc" in case of debian based systems
+    -G       - Same as "-g" but grab the color in an indefinite loop
+
+Examples:
+    colorShow show s 0.7
+        Draw color rectangle with saturation 0.7 and different hue and luminosity on a full screen
+    colorShow show l 30% -c 40 -r 25
+        Draw color rectangle with luminosity 0.3 and different hue and saturation
+        using a rectangle with 40 columns and 25 rows
+    colorShow show r 0x80 -q -g
+        Draw color rectangle with red level 0.5 and different green and blue on a full screen
+        without decoration
+        Grab color with mouse and print its info after the action
+    colorShow rgb 407090
+        Show info about the #407090 color
+    colorShow hsl 180 0.3 60%
+        Show info about the color with hue 180, saturation 0.3 and luminosity 0.6
